@@ -1,3 +1,4 @@
+from contextvars import Token
 from AFD.ab_p import ver_ab_p
 from AFD.comment import ver_comment
 from AFD.eof import ver_eof
@@ -10,8 +11,7 @@ from AFD.pt_v import ver_pt_v
 from AFD.vir import ver_vir
 
 
-
-def afd(line):
+def afd(line: list[str]):
     for position in line:
         for char in position:
             if char == range(0,9):
