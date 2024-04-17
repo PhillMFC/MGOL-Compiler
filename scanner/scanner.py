@@ -1,7 +1,7 @@
 import sys, os
 
-file_mgol = sys.argv[1]
 
-cat = open(file_mgol, 'r')
-print(cat.read())
-cat.close()
+file = open('MGOL-Compiler\mgol_sample.txt', 'r')
+print(file.readline())
+print(file.readline())
+print(file.readline())
