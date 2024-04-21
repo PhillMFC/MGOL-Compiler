@@ -13,11 +13,13 @@ from AFD.q7 import ver_vir
 
 
 def afd(line: list[str]) -> str:
-    
-    for char in line:
-        asciiChar = ord(char)
-        print(ord(char))
-        if asciiChar in range(65,91) or asciiChar in range(97, 123):
-            print('ACEITO')
+
+    lastChar: str = ''
+    for value,index in enumerate(line):
+        print(line)
+        print(value, index)
+            
+
+
        
             
