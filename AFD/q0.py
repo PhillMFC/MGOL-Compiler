@@ -1,39 +1,23 @@
 from contextvars import Token
-from AFD.ab_p import ver_ab_p
-from AFD.comment import ver_comment
-from AFD.eof import ver_eof
-from AFD.id import ver_id
-from AFD.lit import ver_lit
-from AFD.num import ver_num
-from AFD.opm import ver_opm
+import numpy as np
+from AFD.q16 import ver_ab_p
+from AFD.q2 import ver_comment
+from AFD.q3 import ver_eof
+from AFD.q6 import ver_id
+from AFD.q5 import ver_lit
+from AFD.q19 import ver_num
+from AFD.q18 import ver_opm
 from AFD.opr_rcb import ver_opr_rcb
-from AFD.pt_v import ver_pt_v
-from AFD.vir import ver_vir
+from AFD.q15 import ver_pt_v
+from AFD.q7 import ver_vir
 
 
 def afd(line: list[str]) -> str:
-    for position in line:
-        for char in position:
-            if char == range(0,9):
-                ver_num(position)
-            elif char == '"':
-                ver_lit(position)
-            elif char == range(65,91) | range(97,123):
-                ver_id(position)
-            elif char == "{":
-                ver_comment(position)
-            elif char == '$':
-                ver_eof()
-            elif char == "<" | '=' | '>':
-                ver_opr_rcb(position)
-            elif char == "+" | '-' | '*' | '/':
-                ver_opm(char)
-            elif char == '(':
-                ver_ab_p()
-            elif char == ')':
-                ver_pt_v()
-            elif char == ',':
-                ver_vir()
-            else:
-                return "ERRO - afd"
+    
+    for char in line:
+        asciiChar = ord(char)
+        print(ord(char))
+        if asciiChar in range(65,91) or asciiChar in range(97, 123):
+            print('ACEITO')
+       
             
