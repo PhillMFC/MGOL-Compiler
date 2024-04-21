@@ -6,4 +6,5 @@ class Table:
                         "leia","se","entao","fimse","repita",
                         "fimrepita","fim","inteiro","literal",
                         "real")
+    _symbols: list[str] = ['"', '\n', '<', '>', '-', ',', ';', ':', '.', '!', '?']
 

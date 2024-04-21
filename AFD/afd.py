@@ -11,7 +11,7 @@ from AFD.pt_v import ver_pt_v
 from AFD.vir import ver_vir
 
 
-def afd(line: list[str]):
+def afd(line: list[str]) -> str:
     for position in line:
         for char in position:
             if char == range(0,9):
