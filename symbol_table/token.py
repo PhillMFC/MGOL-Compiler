@@ -1,8 +1,8 @@
 class Token:
-    def __init__(self) -> None:
-        self._lexeme: str = ''
-        self._lexemeClass: str = ''
-        self._lexemeType: str = ''
+    def __init__(self, lexeme, lexemeClass, lexemeType) -> None:
+        self._lexeme: str = lexeme
+        self._lexemeClass: str = lexemeClass
+        self._lexemeType: str = lexemeType
 
     @property
     def lexeme(self) ->str:
