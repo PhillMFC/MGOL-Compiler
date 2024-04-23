@@ -3,10 +3,11 @@ from AFD.q0 import afd
 
 file = open('Compiler\scanner\mgol_sample.txt','r', encoding='utf-8')
 
-def lineTreatment(line: list[str]) -> list[str]:
+def lexemeTreatment(line: list[str]) -> list[str]:
     charLine: list[str] = np.array(list(line))
     word: str = ''
     _newline: list[str] = []
+    
     for char in charLine:
         asciiChar = ord(char)
         if asciiChar in range(65,91) or asciiChar in range(97, 123):
@@ -20,4 +21,4 @@ def lineTreatment(line: list[str]) -> list[str]:
     return _newline
 
 for line in file.readlines():
-    afd(lineTreatment(line))
+    afd(lexemeTreatment(line))

@@ -15,8 +15,9 @@ from AFD.q7 import ver_vir
 def afd(line: list[str]) -> str:
 
     lastChar: str = ''
+    i=0
     for index,value in enumerate(line):
-        print(line)
+        print(value)
             
 
 
