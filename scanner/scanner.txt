@@ -1,0 +1,24 @@
+Numpy: biblioteca de arrays com tempo de execução melhor do que python
+Importa a função afd de q0
+
+Abre o arquivo a ser compilado
+
+Função de tratamento de lexema 
+    charLine é um vetor de caracteres. list(line) retorna a linha dividida em cada carácter e np.array() transforma esse vetor em um array do tipo Numpy
+    word é uma variável para armazenamento de lexemas alfa numéricos
+    _newline aramazena a nova linha. Exemplo: Entrada: line = "data=4" Saída: _newline = ["data", "=", "4"]
+
+    loop de carácter em carácter
+        asciiChar recebe o valor ascii do carácter
+        se o valor for letra minúscula ou ou maiúscula
+            word é concatenado com o carácter
+        se não
+            se word conter alguma letra ou palavra
+                _newline recebe word
+                word passa a ser string vazia
+            _newline recebe o carácter que não é uma letra
+
+    retorna a nova linha tratada
+
+    Para linha do arquivo
+        Executa a função de tratamento do lexema e retorna o vetor para a função afd de q0
