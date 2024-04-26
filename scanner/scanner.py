@@ -1,4 +1,5 @@
 import numpy as np
+from AFD.afd import Afd
 
 file = open('Compiler\scanner\mgol_sample.txt','r', encoding='utf-8')
 
@@ -9,6 +10,7 @@ def lexemeTreatment(line: list[str]) -> list[str]:
     
     for char in charLine:
         asciiChar = ord(char)
+
         if asciiChar in range(65,91) or asciiChar in range(97, 123):
             word += char
         else:
@@ -20,4 +22,4 @@ def lexemeTreatment(line: list[str]) -> list[str]:
     return _newline
 
 for line in file.readlines():
-    print(lexemeTreatment(line))
+    Afd(lexemeTreatment(line)).iterateOverLine()
