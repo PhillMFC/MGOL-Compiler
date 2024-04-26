@@ -1,5 +1,4 @@
 import numpy as np
-from AFD.q0 import afd
 
 file = open('Compiler\scanner\mgol_sample.txt','r', encoding='utf-8')
 
@@ -21,4 +20,4 @@ def lexemeTreatment(line: list[str]) -> list[str]:
     return _newline
 
 for line in file.readlines():
-    afd(lexemeTreatment(line))
+    print(lexemeTreatment(line))
