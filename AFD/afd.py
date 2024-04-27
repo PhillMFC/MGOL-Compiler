@@ -68,11 +68,7 @@ class Afd:
         print(self.tokenLine)
 
     def verifyLexeme(self, lexeme: str) -> bool:
-        print(self.currentState)
-
         _transitionTable: dict = self.transitionTable(lexeme)
         self.currentState: bool = _transitionTable[self.currentState][lexeme]
         result: bool = self.currentState in self.finalStates
-        print(self.currentState)
-
         return result
