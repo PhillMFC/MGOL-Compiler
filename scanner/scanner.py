@@ -22,4 +22,4 @@ def lexemeTreatment(line: list[str]) -> list[str]:
     return _newline
 
 for line in file.readlines():
-    Afd(lexemeTreatment(line)).iterateOverLine()
+    Afd(lexemeTreatment(line)).iterateLexemeList()
