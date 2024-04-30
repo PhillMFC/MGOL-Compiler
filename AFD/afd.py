@@ -34,7 +34,6 @@ class Afd:
         if lexeme.isnumeric():
             return lexeme
         
-        #B <  - 2 . 0
     def transitionTable(self, lexeme) -> dict :
         return {
             'q0': {' ':'q25', '\n':'q25', '{':'q1', '$':'q3','"':'q4', ',':'q7', '<':'q8', '>':'q13', '=':'q12', '+':'q18', '-':'q18', ';':'q15', '(':'q16',')':'q17', '*':'q18', '/':'q18', f'{self.verifyAlpha(lexeme)}':'q6', f'{self.verifyNumeric(lexeme)}':'q19'},
@@ -51,11 +50,9 @@ class Afd:
             'q24': {f'{self.verifyNumeric(lexeme)}':'q24'},
             'q25': {' ':'q25', '\n':'q25'}
             } 
-        
     
     def iterateLexemeList(self) -> None:
         print('LINHA: ' + f'{self.lexemeList}')
-        # [0, 1, ..., len(lista) -1]
         index = 0
         while index + 1 < len(self.lexemeList):
 
