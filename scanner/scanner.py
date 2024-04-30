@@ -23,3 +23,5 @@ def lexemeTreatment(line: list[str]) -> list[str]:
 
 for line in file.readlines():
     Afd(lexemeTreatment(line)).iterateLexemeList()
+
+file.close()
