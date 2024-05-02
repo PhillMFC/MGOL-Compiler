@@ -1,5 +1,5 @@
-import sys
 from AFD.token import Token
+import sys
 
 class Afd:
     def __init__(self, lexemeList: list[str]) -> None:
@@ -62,9 +62,9 @@ class Afd:
     
     def iterateLexemeList(self) -> None:
         print('LINHA: ' + f'{self.lexemeList}')
-        index: int = 0
-        print('ta funfando')
+        index = 0
         while index + 1 < len(self.lexemeList):
+
             if self.verifyLexeme(self.lexemeList[index]):
                 self.currentLexeme += self.lexemeList[index]
 
@@ -82,9 +82,10 @@ class Afd:
             else:
                 self.currentLexeme += self.lexemeList[index]
             index += 1
+        
 
     def verifyNextLexeme(self, index: int) -> int:
-        _index: int = index
+        _index = index
         while self.lexemeList[_index] in self.transitionTable(self.lexemeList[_index])[self.currentState]:
             self.currentLexeme += self.lexemeList[_index]
             self.currentState = self.transitionTable(self.lexemeList[_index])[self.currentState][self.lexemeList[_index]]
@@ -92,9 +93,7 @@ class Afd:
         return _index
 
     def generateToken(self, lexeme: str) -> None:
-        token = Token(lexeme, self.currentState)
-        self.tokenList.append(token.lexemeClass)
-        print(f'TokenList: {self.tokenList}' )
+        self.tokenList.append( Token(lexeme, self.currentState))
         self.currentLexeme = ''
         self.currentState = 'q0'
 

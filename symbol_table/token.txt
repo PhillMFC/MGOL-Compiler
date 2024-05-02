@@ -1,7 +1,0 @@
-Define a classe Token
-    Construtor da classe
-
-@property define uma propriedade da classe. Permite acessar métodos como atributos
-    Define um getter
-
-@propriedade.setter permite implementar um método setter para uma propriedade

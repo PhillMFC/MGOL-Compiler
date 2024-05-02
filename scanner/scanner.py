@@ -1,7 +1,6 @@
 import numpy as np
 from AFD.afd import Afd
 
-file = open('Compiler\scanner\mgol_sample.txt','r', encoding='utf-8')
 
 def lexemeTreatment(line: list[str]) -> list[str]:
     charLine: list[str] = np.array(list(line))
@@ -21,7 +20,14 @@ def lexemeTreatment(line: list[str]) -> list[str]:
             
     return _newline
 
-for line in file.readlines():
-    Afd(lexemeTreatment(line)).iterateLexemeList()
+def compile():
+    file = open('Compiler\scanner\mgol_sample.txt','r', encoding='utf-8')
 
-file.close()
+    for line in file.readlines():
+        Afd(lexemeTreatment(line)).iterateLexemeList()
+    
+    
+    
+    file.close()
+
+compile()
