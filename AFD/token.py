@@ -15,15 +15,12 @@ class Token:
         if lexeme in self.keyWords:
             return lexeme
         
-        elif lexeme.isalpha():
-            return 'string'
-        
         elif lexeme.isnumeric():
             try:
                 int(lexeme)
-                return 'int'
+                return 'inteiro'
             except:
-                return 'float'
+                return 'real'
 
         return 
     

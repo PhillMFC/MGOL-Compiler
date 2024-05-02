@@ -6,12 +6,7 @@ class Afd:
         self.lexemeList: list[str] = lexemeList
         self.currentState: str = 'q0'
         self.currentLexeme: str = ''
-        self.tokenList: list = []
-    
-    allStates: tuple = ('q0', 'q1', 'q2', 'q3', 'q4', 'q5', 'q6', 
-                'q7', 'q8', 'q9', 'q10', 'q11', 'q12',
-                'q13','q14', 'q15', 'q16', 'q17', 'q18', 
-                'q19', 'q20', 'q21', 'q22', 'q23', 'q24', 'q25')
+        self.tokenList: list[Token] = []
 
     finalStates: tuple = ('q2', 'q3', 'q5', 'q6', 
                    'q7','q8', 'q9', 'q10', 'q11', 
@@ -19,9 +14,6 @@ class Afd:
                    'q16', 'q17', 'q18', 'q19', 
                    'q21', 'q24', 'q25')
 
-    def verifyKeyWord(self, lexeme: str) -> bool:
-        return lexeme in self.keyWords
-            
     def verifyAlpha(self, lexeme: str) -> str:
         if lexeme.isalpha():
             return lexeme
@@ -32,7 +24,7 @@ class Afd:
         
     def transitionTable(self, lexeme) -> dict :
         return {
-            'q0': {' ':'q25', '\n':'q25', '{':'q1', '$':'q3','"':'q4', ',':'q7', '<':'q8', '>':'q13', '=':'q12', '+':'q18', '-':'q18', ';':'q15', '(':'q16',')':'q17', '*':'q18', '/':'q18', f'{self.verifyAlpha(lexeme)}':'q6', f'{self.verifyNumeric(lexeme)}':'q19'},
+            'q0': {' ':'q25', '$':'q3', '\n':'q25', '{':'q1', '$':'q3','"':'q4', ',':'q7', '<':'q8', '>':'q13', '=':'q12', '+':'q18', '-':'q18', ';':'q15', '(':'q16',')':'q17', '*':'q18', '/':'q18', f'{self.verifyAlpha(lexeme)}':'q6', f'{self.verifyNumeric(lexeme)}':'q19'},
             'q1': { '}':'q2', ' ':'q1', '\n':'q1', ':':'q1', f'{self.verifyAlpha(lexeme)}': 'q1', f'{self.verifyNumeric(lexeme)}':'q1', ' ':'q1', '\n':'q1', '{':'q1', '$':'q1', ',':'q1', '<':'q1', '>':'q1', '=':'q1', '+':'q1', '-':'q1', ';':'q1', '(':'q1',')':'q1', '*':'q1', '/':'q1'},
             'q2': {},
             'q3': {},
@@ -61,10 +53,11 @@ class Afd:
             } 
     
     def iterateLexemeList(self) -> None:
-        print('LINHA: ' + f'{self.lexemeList}')
+        print('LINHA: ' + f'{self.lexemeList}\n')
+
         index: int = 0
-        print('ta funfando')
         while index + 1 < len(self.lexemeList):
+
             if self.verifyLexeme(self.lexemeList[index]):
                 self.currentLexeme += self.lexemeList[index]
 
@@ -82,9 +75,16 @@ class Afd:
             else:
                 self.currentLexeme += self.lexemeList[index]
             index += 1
+        
+        for token in self.tokenList:
+            print(f'Classe:   {token.lexemeClass}', end='  ')
+            print(f'Lexema: {token.lexeme}', end='  ')
+            print(f'Tipo:  {token.lexemeType}')
+        print('\n')
 
     def verifyNextLexeme(self, index: int) -> int:
         _index: int = index
+
         while self.lexemeList[_index] in self.transitionTable(self.lexemeList[_index])[self.currentState]:
             self.currentLexeme += self.lexemeList[_index]
             self.currentState = self.transitionTable(self.lexemeList[_index])[self.currentState][self.lexemeList[_index]]
@@ -92,9 +92,12 @@ class Afd:
         return _index
 
     def generateToken(self, lexeme: str) -> None:
-        token = Token(lexeme, self.currentState)
-        self.tokenList.append(token.lexemeClass)
-        print(f'TokenList: {self.tokenList}' )
+        if lexeme == ' ':
+            ()
+        else:
+            token = Token(lexeme, self.currentState)
+            self.tokenList.append(token)
+
         self.currentLexeme = ''
         self.currentState = 'q0'
 
@@ -102,4 +105,4 @@ class Afd:
         _transitionTable: dict = self.transitionTable(lexeme)
         self.currentState: str = _transitionTable[self.currentState][lexeme]
         result: bool = self.currentState in self.finalStates
-        return result 
+        return result

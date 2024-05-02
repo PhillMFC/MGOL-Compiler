@@ -25,9 +25,7 @@ def compile():
 
     for line in file.readlines():
         Afd(lexemeTreatment(line)).iterateLexemeList()
-    
-    
-    
-    file.close()
 
-compile()
+    Afd(['$', ' ']).iterateLexemeList()
+    file.close()
+    

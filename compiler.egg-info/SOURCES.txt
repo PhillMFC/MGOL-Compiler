@@ -7,3 +7,5 @@ compiler.egg-info/PKG-INFO
 compiler.egg-info/SOURCES.txt
 compiler.egg-info/dependency_links.txt
 compiler.egg-info/top_level.txt
+scanner/__init__.py
+scanner/scanner.py
