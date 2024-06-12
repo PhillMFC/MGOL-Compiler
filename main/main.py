@@ -1,6 +1,16 @@
-from scanner.scanner import compile	
+from scanner.scanner import Scanner
 
 if __name__ == "__main__":
-    compile()
+    Scanner.generateToken()
+    Scanner.generateToken()
+    Scanner.generateToken()
+    Scanner.generateToken()
+
+
+
+
+
+    
+
     
     

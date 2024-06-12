@@ -3,7 +3,6 @@ class Token:
         self.lexeme: str = lexeme
         self.lexemeClass: str = self.setLexemeClass(currentState)
         self.lexemeType: str = self.setLexemeType(lexeme)
-        self.idTable: dict = {}
 
     keyWords: tuple = ("inicio","varinicio","varfim","escreva",
                     "leia","se","entao","fimse","repita",
@@ -11,18 +10,7 @@ class Token:
                     "real")
     
     def setLexemeType(self, lexeme: str):
-
-        if lexeme in self.keyWords:
-            return lexeme
-        
-        elif lexeme.isnumeric():
-            try:
-                int(lexeme)
-                return 'inteiro'
-            except:
-                return 'real'
-
-        return 
+        return f'{type(lexeme)}'
     
     def setIdTable(self, **kwargs):
         self.idTable = kwargs
