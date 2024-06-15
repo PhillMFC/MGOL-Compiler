@@ -1,6 +1,5 @@
-import numpy as np
 from AFD.afd import Afd
-from AFD.token import Token
+from Token.token import Token
 
 class Scanner:
 
@@ -32,12 +31,11 @@ class Scanner:
         if not self.file:
             self.setFile()
 
-        while not self.afd.token:
-            
-            print([self.lineIndex, self.columnIndex, self.file[self.lineIndex][self.columnIndex]])
-            self.afd.setChar(self.file[self.lineIndex][self.columnIndex])
-            self.afd.verifyChar()            
+        self.afd.setChar(self.file[self.lineIndex][self.columnIndex])
+
+        while self.afd.verifyChar():
             self.nextChar()
+            self.afd.setChar(self.file[self.lineIndex][self.columnIndex])
 
         print(getattr(self.afd, 'token'))
         self.afd.resetAfd()

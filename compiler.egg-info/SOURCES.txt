@@ -2,7 +2,11 @@ README.md
 setup.py
 AFD/__init__.py
 AFD/afd.py
-AFD/token.py
+AFD/idTbale.py
+DTO/__init__.py
+Token/__init__.py
+Token/token.py
+TokenMapper/__init__.py
 compiler.egg-info/PKG-INFO
 compiler.egg-info/SOURCES.txt
 compiler.egg-info/dependency_links.txt

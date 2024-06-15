@@ -1,5 +1,4 @@
-import sys
-from AFD.token import Token
+from Token.token import Token
 
 class Afd:
     
@@ -66,6 +65,7 @@ class Afd:
         try:
             self.currentState = _transitionTable[self.currentState][self.char]
             self.currentLexeme += self.char
+            return True
         except:
             if self.currentState in self.finalStates:
                 self.token = self.currentLexeme
