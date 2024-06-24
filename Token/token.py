@@ -10,10 +10,15 @@ class Token:
                     "real")
     
     def setLexemeType(self, lexeme: str):
-        return f'{type(lexeme)}'
-    
-    def setIdTable(self, **kwargs):
-        self.idTable = kwargs
+        try:
+            if int(lexeme):
+                return 'inteiro'
+        except:
+            try:
+                if float(lexeme):
+                    return 'real'
+            except:
+                return 'literal'
 
     def setLexemeClass(self, currentState: str) -> str:
 

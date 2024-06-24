@@ -16,6 +16,9 @@ class Afd:
     @classmethod
     def setChar(self, char: str):
         self.char = char
+
+        if self.char == '$':
+            self.generateToken()
     
     @classmethod
     def verifyAlpha(self, lexeme: str) -> str:
@@ -53,6 +56,8 @@ class Afd:
 
     @classmethod
     def generateToken(self) -> Token:
+        if self.currentLexeme == ' ' or self.currentLexeme == '\n':
+            return True
         return Token(self.currentLexeme, self.currentState)
 
     @classmethod
@@ -61,6 +66,7 @@ class Afd:
 
     @classmethod
     def verifyChar(self):
+
         _transitionTable: dict = self.transitionTable(self.char)
         try:
             self.currentState = _transitionTable[self.currentState][self.char]
@@ -68,4 +74,4 @@ class Afd:
             return True
         except:
             if self.currentState in self.finalStates:
-                self.token = self.currentLexeme
+                self.token = self.generateToken()

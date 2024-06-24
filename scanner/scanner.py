@@ -1,5 +1,5 @@
 from AFD.afd import Afd
-from Token.token import Token
+from IdTable.idTable import IdTable
 
 class Scanner:
 
@@ -14,28 +14,36 @@ class Scanner:
         file = open('scanner\mgol_sample.txt','r', encoding='utf-8')
         self.file = list(file)
         file.close()
+        self.file = self.file + ['$',' ']
 
     @classmethod
     def nextChar(self):
         if self.columnIndex + 1 == len(self.file[self.lineIndex]):
             self.columnIndex = 0
             self.lineIndex += 1
-        elif self.lineIndex + 1 == len(self.file):
-            self.afd.setChar('$')
-            self.afd.verifyChar()
         else:
             self.columnIndex += 1
 
     @classmethod
     def generateToken(self):
+        
         if not self.file:
             self.setFile()
 
         self.afd.setChar(self.file[self.lineIndex][self.columnIndex])
 
         while self.afd.verifyChar():
-            self.nextChar()
-            self.afd.setChar(self.file[self.lineIndex][self.columnIndex])
+            try:
+                self.nextChar()
+                self.afd.setChar(self.file[self.lineIndex][self.columnIndex])
+            except: 
+                break
 
-        print(getattr(self.afd, 'token'))
+        try:
+            self.token = getattr(self.afd, 'token')
+            print(getattr(self.afd, 'token').__dict__)
+            IdTable.verifyToken(self.token)
+        except:
+            ()
         self.afd.resetAfd()
+        return self.token

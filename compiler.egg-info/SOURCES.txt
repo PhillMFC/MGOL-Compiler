@@ -2,8 +2,9 @@ README.md
 setup.py
 AFD/__init__.py
 AFD/afd.py
-AFD/idTbale.py
 DTO/__init__.py
+IdTable/__init__.py
+IdTable/idTable.py
 Token/__init__.py
 Token/token.py
 TokenMapper/__init__.py
