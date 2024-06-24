@@ -30,7 +30,7 @@ class IdTable:
         self._isTokenIdValue: bool = False
         _currentIdValue: str = self.idTable[self._lastIdToken]
         if _currentIdValue:
-            self.idTable[self._lastIdToken] = _currentIdValue.replace(f'{self._lastIdToken}',f'{self._idValue}')
+            self.idTable[self._lastIdToken] = _currentIdValue.replace(f'{self._lastIdToken}',f'({self._idValue})')
         else:
             self.idTable[self._lastIdToken] = self._idValue
         self._idValue = ''
