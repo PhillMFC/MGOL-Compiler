@@ -30,12 +30,12 @@ class Scanner:
         if not self.file:
             self.setFile()
 
-        self.afd.setChar(self.file[self.lineIndex][self.columnIndex])
+        self.afd.setChar(self.file[self.lineIndex][self.columnIndex], self.lineIndex, self.columnIndex)
 
         while self.afd.verifyChar():
             try:
                 self.nextChar()
-                self.afd.setChar(self.file[self.lineIndex][self.columnIndex])
+                self.afd.setChar(self.file[self.lineIndex][self.columnIndex], self.lineIndex, self.columnIndex)
             except: 
                 break
 
@@ -47,3 +47,11 @@ class Scanner:
             ()
         self.afd.resetAfd()
         return self.token
+    
+    @classmethod
+    def getLineIndex(self):
+        return self.lineIndex
+
+    @classmethod
+    def getColumnIndex(self):
+        return self.columnIndex

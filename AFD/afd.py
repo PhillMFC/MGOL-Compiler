@@ -1,7 +1,8 @@
 from Token.token import Token
 
 class Afd:
-    
+    lineIndex = ''
+    columnIndex = ''
     char: str = ''
     currentState: str = 'q0'
     currentLexeme: str = ''
@@ -14,8 +15,10 @@ class Afd:
                    'q21', 'q24', 'q25')
 
     @classmethod
-    def setChar(self, char: str):
+    def setChar(self, char: str, lineIndex, columnIndex):
         self.char = char
+        self.lineIndex = lineIndex
+        self.columnIndex = columnIndex
 
         if self.char == '$':
             self.generateToken()
@@ -58,7 +61,7 @@ class Afd:
     def generateToken(self) -> Token:
         if self.currentLexeme == ' ' or self.currentLexeme == '\n':
             return True
-        return Token(self.currentLexeme, self.currentState)
+        return Token(self.currentLexeme, self.currentState, self.lineIndex, self.columnIndex)
 
     @classmethod
     def getToken(self) -> Token:

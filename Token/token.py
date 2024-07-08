@@ -1,6 +1,10 @@
+from Error.exception import Exception
+
 class Token:
-    def __init__(self, lexeme, currentState) -> None:
+    def __init__(self, lexeme, currentState, lineIndex, columnIndex) -> None:
         self.lexeme: str = lexeme
+        self.lineIndex = lineIndex
+        self.columnIndex = columnIndex
         self.lexemeClass: str = self.setLexemeClass(currentState)
         self.lexemeType: str = self.setLexemeType(lexeme)
 
@@ -10,15 +14,19 @@ class Token:
                     "real")
     
     def setLexemeType(self, lexeme: str):
-        try:
-            if int(lexeme):
-                return 'inteiro'
-        except:
+        if self.lexemeClass == 'Num':
             try:
-                if float(lexeme):
-                    return 'real'
+                if int(lexeme):
+                    return 'inteiro'
             except:
-                return 'literal'
+                return 'real'
+        elif self.lexemeClass == 'Lit':
+           return 'literal'
+        elif self.lexemeClass == 'id':
+           return 'NULO'
+        elif self.lexemeClass == 'ERRO':
+            Exception.raiseErrorMessage('ERRO LÉXICO - Caractere inválido na linguagem', self.lineIndex, self.columnIndex )
+
 
     def setLexemeClass(self, currentState: str) -> str:
 

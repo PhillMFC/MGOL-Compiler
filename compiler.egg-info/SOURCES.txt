@@ -3,6 +3,8 @@ setup.py
 AFD/__init__.py
 AFD/afd.py
 DTO/__init__.py
+Error/__init__.py
+Error/exception.py
 IdTable/__init__.py
 IdTable/idTable.py
 Token/__init__.py
