@@ -1,7 +1,5 @@
 AFD
-DTO
 Error
-IdTable
+SymbolTable
 Token
-TokenMapper
 scanner

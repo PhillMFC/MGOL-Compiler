@@ -1,12 +1,12 @@
 from scanner.scanner import Scanner
-from IdTable.idTable import IdTable
+from SymbolTable.symbolTable import SymbolTable
 
 if __name__ == "__main__":
 
     try:
         while Scanner.generateToken():
             ()
-        IdTable.printTable()
+        
 
     except:
-        print(IdTable.idTable)
+        SymbolTable.printTable()

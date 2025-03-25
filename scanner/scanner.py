@@ -1,5 +1,6 @@
 from AFD.afd import Afd
-from IdTable.idTable import IdTable
+from SymbolTable.symbolTable import SymbolTable
+from Token.token import Token
 
 class Scanner:
 
@@ -42,9 +43,10 @@ class Scanner:
         try:
             self.token = getattr(self.afd, 'token')
             print(getattr(self.afd, 'token').__dict__)
-            IdTable.verifyToken(self.token)
+            SymbolTable.verifyToken(self.token)
         except:
             ()
+            
         self.afd.resetAfd()
         return self.token
     
