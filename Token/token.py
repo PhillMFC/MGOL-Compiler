@@ -9,8 +9,8 @@ class Token:
         self.lexemeType: str = self.setLexemeType(lexeme)
 
     keywords: tuple = ("inicio","varinicio","varfim","escreva",
-                    "leia","se","entao","fimse","repita",
-                    "fimrepita","fim","inteiro","lit",
+                    "leia","se","entao","fimse","faca-ate",
+                    "fimfaca","fim","inteiro","lit",
                     "real")
     state_map = {
         'q2': 'Comentário',
