@@ -1,5 +1,3 @@
-from Error.error import Error
-
 class Token:
     def __init__(self, lexeme, currentState, lineIndex, columnIndex) -> None:
         self.lexeme: str = lexeme
@@ -42,7 +40,6 @@ class Token:
             return self.state_map.get(currentState, 'ERRO')
         else:
             return 'ERRO'
-        
         
     def setLexemeType(self, lexeme: str):
         if self.lexemeClass == 'Num':
