@@ -16,7 +16,6 @@ class Scanner:
         file = open('scanner\mgol_sample.txt','r', encoding='utf-8')
         self.file = list(file)
         file.close()
-        self.file[-1] += '\n' 
         self.file = self.file + ['$\n']
         print(self.file)
 
@@ -50,9 +49,9 @@ class Scanner:
         self.afd.resetAfd()
 
         try:
-            print( self.token.__dict__)
             SymbolTable.setIdValue(self.token)
             return self.token
         except:
-            self.requestToken()
+            return True
+            
 
