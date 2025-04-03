@@ -1,4 +1,5 @@
 from Token.token import Token
+from Error.error import Error
 
 class Afd:
     lineIndex = ''
@@ -19,9 +20,6 @@ class Afd:
         self.char = char
         self.lineIndex = lineIndex
         self.columnIndex = columnIndex
-
-        if self.char == '$':
-            self.generateToken()
     
     @classmethod
     def verifyAlpha(self, lexeme: str) -> str:
@@ -58,23 +56,26 @@ class Afd:
             } 
 
     @classmethod
-    def generateToken(self) -> Token:
+    def generateToken(self, errorChar=None) -> Token:
         if self.currentLexeme == ' ' or self.currentLexeme == '\n':
             return True
-        return Token(self.currentLexeme, self.currentState, self.lineIndex, self.columnIndex)
-
-    @classmethod
-    def getToken(self) -> Token:
-        return self.token or False
-
+        return Token(errorChar or self.currentLexeme, self.currentState, self.lineIndex, self.columnIndex)
+    
     @classmethod
     def verifyChar(self):
-
         _transitionTable: dict = self.transitionTable(self.char)
+        
         try:
-            self.currentState = _transitionTable[self.currentState][self.char]
+            self.currentState: str = _transitionTable[self.currentState][self.char]
             self.currentLexeme += self.char
-            return True
         except:
             if self.currentState in self.finalStates:
                 self.token = self.generateToken()
+            else:
+                Error.raiseErrorMessage(self.lineIndex, self.columnIndex, f"Erro léxico - Caractere '{self.char}' nao pertence a linguagem")
+                self.token = self.generateToken(self.char)
+        
+    @classmethod
+    def getToken(self):
+        return self.token
+        

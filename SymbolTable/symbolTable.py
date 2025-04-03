@@ -2,16 +2,16 @@ from Token.token import Token
 
 class SymbolTable:
     idTable: dict = {}
-    keyWords: tuple = ("inicio","varinicio","varfim","escreva",
-                    "leia","se","entao","fimse","repita",
-                    "fimrepita","fim","inteiro","literal",
+    keywords: tuple = ("inicio","varinicio","varfim","escreva",
+                    "leia","se","entao","fimse","faca-ate",
+                    "fimfaca","fim","inteiro","literal",
                     "real")
     _lastIdToken: str = ''
     _isTokenIdValue: bool = False
     _idValue: str = ''
 
     @classmethod
-    def verifyToken(self, token: Token):
+    def setIdValue(self, token: Token):
 
         if self._isTokenIdValue and token.lexemeClass != 'PT_V':
             self._idValue = self._idValue + token.lexeme
@@ -42,7 +42,7 @@ class SymbolTable:
 
     @classmethod
     def printTable(self):
-        print('\n', self.idTable, '\n', self.keyWords)
+        print('\n', self.idTable, '\n', self.keywords)
         
                     
 

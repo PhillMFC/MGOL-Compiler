@@ -2,4 +2,5 @@ AFD
 Error
 SymbolTable
 Token
+main
 scanner

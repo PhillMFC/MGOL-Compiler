@@ -6,6 +6,7 @@ class Scanner:
 
     lineIndex: int = 0
     columnIndex: int = 0
+    currentChar = ''
     file: list[str] = ''
     afd: Afd = Afd()
     token = None
@@ -15,7 +16,9 @@ class Scanner:
         file = open('scanner\mgol_sample.txt','r', encoding='utf-8')
         self.file = list(file)
         file.close()
-        self.file = self.file + ['$',' ']
+        self.file[-1] += '\n' 
+        self.file = self.file + ['$\n']
+        print(self.file)
 
     @classmethod
     def nextChar(self):
@@ -24,36 +27,32 @@ class Scanner:
             self.lineIndex += 1
         else:
             self.columnIndex += 1
-
-    @classmethod
-    def generateToken(self):
         
-        if not self.file:
-            self.setFile()
-
-        self.afd.setChar(self.file[self.lineIndex][self.columnIndex], self.lineIndex, self.columnIndex)
-
-        while self.afd.verifyChar():
-            try:
-                self.nextChar()
-                self.afd.setChar(self.file[self.lineIndex][self.columnIndex], self.lineIndex, self.columnIndex)
-            except: 
-                break
-
-        try:
-            self.token = getattr(self.afd, 'token')
-            print(getattr(self.afd, 'token').__dict__)
-            SymbolTable.verifyToken(self.token)
-        except:
-            ()
-            
-        self.afd.resetAfd()
-        return self.token
+        self.currentChar = self.file[self.lineIndex][self.columnIndex]
     
     @classmethod
-    def getLineIndex(self):
-        return self.lineIndex
-
+    def generateToken(self):
+        while not self.token:
+            self.afd.setChar(self.currentChar, self.lineIndex, self.columnIndex)    
+            self.afd.verifyChar()
+            self.token = self.afd.getToken()
+            if not self.token:
+                self.nextChar()
+    
     @classmethod
-    def getColumnIndex(self):
-        return self.columnIndex
+    def requestToken(self):
+        self.token = None
+        if not self.file:
+            self.setFile()
+            self.currentChar = self.file[self.lineIndex][self.columnIndex]       
+            
+        self.generateToken()
+        self.afd.resetAfd()
+
+        try:
+            print( self.token.__dict__)
+            SymbolTable.setIdValue(self.token)
+            return self.token
+        except:
+            self.requestToken()
+

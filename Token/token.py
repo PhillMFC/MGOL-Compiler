@@ -1,4 +1,4 @@
-from Error.exception import Exception
+from Error.error import Error
 
 class Token:
     def __init__(self, lexeme, currentState, lineIndex, columnIndex) -> None:
@@ -8,11 +8,42 @@ class Token:
         self.lexemeClass: str = self.setLexemeClass(currentState)
         self.lexemeType: str = self.setLexemeType(lexeme)
 
-    keyWords: tuple = ("inicio","varinicio","varfim","escreva",
+    keywords: tuple = ("inicio","varinicio","varfim","escreva",
                     "leia","se","entao","fimse","repita",
-                    "fimrepita","fim","inteiro","literal",
+                    "fimrepita","fim","inteiro","lit",
                     "real")
+    state_map = {
+        'q2': 'Comentário',
+        'q3': 'EOF',
+        'q5': 'Lit',
+        'q6': 'id',
+        'q7': 'Vir',
+        'q10': 'RCB',
+        'q8': 'OPR',
+        'q9': 'OPR',
+        'q11': 'OPR',
+        'q12': 'OPR',
+        'q13': 'OPR',
+        'q15': 'PT_V',
+        'q16': 'AB_P',
+        'q17': 'FC_P',
+        'q18': 'OPM',
+        'q19': 'Num',
+        'q21': 'Num',
+        'q24': 'Num'
+        }
     
+    def setLexemeClass(self, currentState: str) -> str:
+        
+        if self.lexeme in self.keywords:
+            return self.lexeme
+        
+        elif self.state_map.get(currentState, 'ERRO'):
+            return self.state_map.get(currentState, 'ERRO')
+        else:
+            return 'ERRO'
+        
+        
     def setLexemeType(self, lexeme: str):
         if self.lexemeClass == 'Num':
             try:
@@ -22,52 +53,12 @@ class Token:
                 return 'real'
         elif self.lexemeClass == 'Lit':
            return 'literal'
-        elif self.lexemeClass == 'id':
-           return 'NULO'
-        elif self.lexemeClass == 'ERRO':
-            Exception.raiseErrorMessage('ERRO LÉXICO - Caractere inválido na linguagem', self.lineIndex, self.columnIndex )
-
-
-    def setLexemeClass(self, currentState: str) -> str:
-
-        if self.lexeme in self.keyWords:
+        elif self.lexeme in self.keywords:
             return self.lexeme
-        
-        elif currentState == 'q2':
-            return 'Comentário'
-
-        elif currentState == 'q3':
-            return 'EOF'
-              
-        elif currentState == 'q5':
-            return 'Lit'
-                   
-        elif currentState == 'q6':
-            return 'id'
-
-        elif currentState == 'q7':
-            return 'Vir'
-
-        elif currentState == 'q10':
-            return 'RCB'
-
-        elif currentState == 'q8' or currentState == 'q9' or currentState == 'q11' or currentState == 'q12' or currentState == 'q13' or currentState == 'q14':
-            return 'OPR'
-
-        elif currentState == 'q15':
-            return 'PT_V'
-
-        elif currentState == 'q16':
-            return 'AB_P'
-
-        elif currentState == 'q17':
-            return 'FC_P'
-
-        elif currentState == 'q18':
-            return 'OPM'
-
-        elif currentState == 'q19' or currentState == 'q21' or currentState == 'q24':
-            return 'Num'
-        
-        else:
+        elif self.lexemeClass == 'ERRO':
             return 'ERRO'
+        else:
+           return 'NULO'
+
+    def toString(self):
+        return self.__dict__
