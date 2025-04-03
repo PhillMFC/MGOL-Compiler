@@ -57,7 +57,7 @@ class Afd:
 
     @classmethod
     def generateToken(self, errorChar=None) -> Token:
-        if self.currentLexeme == ' ' or self.currentLexeme == '\n':
+        if self.currentLexeme == ' ' or self.currentLexeme == '\n' or self.currentLexeme == '\n ':
             return True
         return Token(errorChar or self.currentLexeme, self.currentState, self.lineIndex, self.columnIndex)
     
