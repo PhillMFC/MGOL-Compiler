@@ -16,6 +16,7 @@ class Scanner:
         file = open('scanner\mgol_sample.txt','r', encoding='utf-8')
         self.file = list(file)
         file.close()
+        self.file[-1] = self.file[-1] + '\n'
         self.file = self.file + ['$\n']
         print(self.file)
 
@@ -37,7 +38,12 @@ class Scanner:
             self.token = self.afd.getToken()
             if not self.token:
                 self.nextChar()
-    
+        try:
+            if self.token.lexemeClass == 'ERRO':
+                self.nextChar()
+        except:
+            ()
+
     @classmethod
     def requestToken(self):
         self.token = None

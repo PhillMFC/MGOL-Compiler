@@ -18,7 +18,7 @@ class Afd:
     @classmethod
     def setChar(self, char: str, lineIndex, columnIndex):
         self.char = char
-        self.lineIndex = lineIndex
+        self.lineIndex = lineIndex+1
         self.columnIndex = columnIndex
     
     @classmethod
@@ -56,7 +56,7 @@ class Afd:
             } 
 
     @classmethod
-    def generateToken(self, errorChar=None) -> Token:
+    def createToken(self, errorChar=None) -> Token:
         if self.currentLexeme == ' ' or self.currentLexeme == '\n' or self.currentLexeme == '\n ':
             return True
         return Token(errorChar or self.currentLexeme, self.currentState, self.lineIndex, self.columnIndex)
@@ -70,10 +70,10 @@ class Afd:
             self.currentLexeme += self.char
         except:
             if self.currentState in self.finalStates:
-                self.token = self.generateToken()
+                self.token = self.createToken()
             else:
                 Error.raiseErrorMessage(self.lineIndex, self.columnIndex, f"Erro léxico - Caractere '{self.char}' nao pertence a linguagem")
-                self.token = self.generateToken(self.char)
+                self.token = self.createToken(self.char)
         
     @classmethod
     def getToken(self):
