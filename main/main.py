@@ -12,6 +12,6 @@ if __name__ == "__main__":
             
 
     except Exception as e:
-       print("código compilado com sucesso")
+       print("análise léxica concluída")
     
     SymbolTable.printTable()
