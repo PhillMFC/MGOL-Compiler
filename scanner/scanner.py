@@ -1,6 +1,7 @@
 from AFD.afd import Afd
 from SymbolTable.symbolTable import SymbolTable
 from Token.token import Token
+import traceback
 
 class Scanner:
 
@@ -10,6 +11,9 @@ class Scanner:
     file: list[str] = ''
     afd: Afd = Afd()
     token = None
+    _isPastTokenFaca = False
+    _isPastTokenHifen = False
+    
 
     @classmethod
     def setFile(self):
@@ -55,9 +59,26 @@ class Scanner:
         self.afd.resetAfd()
 
         try:
+            self.token = self.facaAteToken(self.token)
             SymbolTable.setIdValue(self.token)
             return self.token
-        except:
+        except Exception as e:
             return True
             
 
+    @classmethod
+    def facaAteToken(self, token: Token):
+        if not isinstance(token, bool):
+            if token.lexeme == 'faca':
+                self._isPastTokenFaca = True
+                return True
+            elif token.lexeme == '-' and self._isPastTokenFaca:
+                self._isPastTokenHifen = True
+                return True
+            elif token.lexeme == 'ate' and self._isPastTokenFaca and self._isPastTokenHifen:
+                return Token('faca-ate', 'q6',self.token.lineIndex, self.token.columnIndex)
+            else: 
+                self._isPastTokenFaca = False
+                self._isPastTokenHifen = False
+                return token
+                

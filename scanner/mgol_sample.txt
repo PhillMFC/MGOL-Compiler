@@ -25,6 +25,8 @@ C<-5.0;
  escreva B;
  B<-B+1;
  fimfaca
+ faca
+ faca-isso
 escreva "\nB=\n";
 escreva D;
 escreva "\n";
