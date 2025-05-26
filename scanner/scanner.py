@@ -54,7 +54,7 @@ class Scanner:
         if not self.file:
             self.setFile()
             self.currentChar = self.file[self.lineIndex][self.columnIndex]       
-            
+        
         self.generateToken()
         self.afd.resetAfd()
 
@@ -65,7 +65,6 @@ class Scanner:
         except Exception as e:
             return True
             
-
     @classmethod
     def facaAteToken(self, token: Token):
         if not isinstance(token, bool):
@@ -81,4 +80,3 @@ class Scanner:
                 self._isPastTokenFaca = False
                 self._isPastTokenHifen = False
                 return token
-                
