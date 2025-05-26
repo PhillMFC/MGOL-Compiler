@@ -5,14 +5,12 @@ import traceback
 
 if __name__ == "__main__":
 
+    _scanner = Scanner()
+
     try:
-        # while (token:= _scanner.requestToken()):
-        #     if not isinstance(token, bool):
-        #         print(token.toString())
-        
-        if not isinstance(token, bool):
-            print(token.toString())
-            _Parser.parse(token)
+         while (token:= _scanner.requestToken()):
+             if not isinstance(token, bool):
+                 print(token.toString())
         
     except Exception as e:
        #print( error or "análise léxica concluída")

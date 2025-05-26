@@ -1,7 +1,8 @@
 from Token.token import Token
 
 class SymbolTable:
-    idTable: dict = {}
+    idValueTable: dict = {}
+    idTable: list = []
     keywords: tuple = ("inicio","varinicio","varfim","escreva",
                     "leia","se","entao","fimse","faca-ate",
                     "fimfaca","fim","inteiro","literal",
@@ -23,26 +24,31 @@ class SymbolTable:
             self._isTokenIdValue = True
         
         elif token.lexemeClass == 'id':
-            self.addId(token.lexeme)
+            self.addId(token)
 
     @classmethod
     def updateTable(self):
         self._isTokenIdValue: bool = False
-        _currentIdValue: str = self.idTable[self._lastIdToken]
+        _currentIdValue: str = self.idValueTable[self._lastIdToken]
         if _currentIdValue:
-            self.idTable[self._lastIdToken] = f'{self._idValue}'.replace(f'{self._lastIdToken}',f'({_currentIdValue})')
+            self.idValueTable[self._lastIdToken] = f'{self._idValue}'.replace(f'{self._lastIdToken}',f'({_currentIdValue})')
         else:
-            self.idTable[self._lastIdToken] = self._idValue
+            self.idValueTable[self._lastIdToken] = self._idValue
         self._idValue = ''
     
     @classmethod
-    def addId(self, lexeme: str):
-        self._lastIdToken = lexeme
-        self.idTable.setdefault(lexeme,'')
+    def addId(self, token: str):
+        self._lastIdToken = token.lexeme
+        self.idValueTable.setdefault(token.lexeme,'')
+        
+        if not any( tableToken.lexeme == token.lexeme for tableToken in self.idTable):
+            self.idTable.append(token)
 
     @classmethod
     def printTable(self):
-        print('\n', self.idTable, '\n', self.keywords)
+        for token in self.idTable:
+            print(token.toString())
+        print(self.keywords)
         
                     
 
