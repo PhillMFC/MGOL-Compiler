@@ -41,7 +41,7 @@ class Afd:
     def transitionTable(self, lexeme) -> dict :
         return {
             'q0': {' ':'q25', '$':'q3', '\n':'q25', '{':'q1', '$':'q3','"':'q4', ',':'q7', '<':'q8', '>':'q13', '=':'q12', '+':'q18', '-':'q18', ';':'q15', '(':'q16',')':'q17', '*':'q18', '/':'q18', f'{self.verifyAlpha(lexeme)}':'q6', f'{self.verifyNumeric(lexeme)}':'q19'},
-            'q1': { '}':'q2', ' ':'q1', '\n':'q1', ':':'q1', f'{self.verifyAlpha(lexeme)}': 'q1', f'{self.verifyNumeric(lexeme)}':'q1', ' ':'q1', '\n':'q1', '{':'q1', '$':'q1', ',':'q1', '<':'q1', '>':'q1', '=':'q1', '+':'q1', '-':'q1', ';':'q1', '(':'q1',')':'q1', '*':'q1', '/':'q1'},
+            'q1': { '}':'q2', ' ':'q1', '\n':'q1', ':':'q1', f'{self.verifyAlpha(lexeme)}': 'q1', f'{self.verifyNumeric(lexeme)}':'q1', ' ':'q1', '\n':'q1', '{':'q1', '$':'q1', ',':'q1', '<':'q1', '>':'q1', '=':'q1', '+':'q1', '-':'q1', ';':'q1', '(':'q1',')':'q1', '*':'q1', '/':'q1', '.':'q1', '"':'q1', '\\':'q1'},
             'q4': {'"':'q5',':':'q4', f'{self.verifyAlpha(lexeme)}': 'q4', f'{self.verifyNumeric(lexeme)}':'q4', ' ':'q4','\\':'q4', '\n':'q4', '{':'q4', '$':'q4', ',':'q4', '<':'q4', '>':'q4', '=':'q4', '+':'q4', '-':'q4', ';':'q4', '(':'q4',')':'q4', '*':'q4', '/':'q4'}, 
             'q6': {f'{self.verifyAlpha(lexeme)}': 'q6', f'{self.verifyNumeric(lexeme)}':'q6', '_':'q6'},
             'q8': {'>':'q11', '=':'q9', '-':'q10'},
@@ -56,15 +56,14 @@ class Afd:
             } 
 
     @classmethod
-    def createToken(self, errorChar=None) -> Token:
+    def createToken(self, errorChar=None):
         if self.currentLexeme == ' ' or self.currentLexeme == '\n' or self.currentLexeme == '\n ':
             return True
         return Token(errorChar or self.currentLexeme, self.currentState, self.lineIndex, self.columnIndex)
     
     @classmethod
-    def verifyChar(self):
+    def verifyChar(self) -> None:
         _transitionTable: dict = self.transitionTable(self.char)
-        
         try:
             self.currentState: str = _transitionTable[self.currentState][self.char]
             self.currentLexeme += self.char
@@ -76,6 +75,6 @@ class Afd:
                 self.token = self.createToken(self.char)
         
     @classmethod
-    def getToken(self):
+    def getToken(self) -> Token:
         return self.token
         

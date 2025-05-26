@@ -32,7 +32,7 @@ class Parser:
         currentToken = self._scanner.requestToken()
         
         while (currentToken):
-            if not isinstance(currentToken,bool):
+            if not isinstance(currentToken,bool) and currentToken.lexemeClass != 'Comentário':
                 state = stack[-1]
                 tokenClass = currentToken.lexemeClass
                 

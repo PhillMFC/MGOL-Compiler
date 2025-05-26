@@ -9,7 +9,7 @@ if __name__ == "__main__":
 
     try:
          while (token:= _scanner.requestToken()):
-             if not isinstance(token, bool):
+             if not isinstance(token, bool) and token.lexemeClass != 'Comentário':
                  print(token.toString())
         
     except Exception as e:

@@ -41,7 +41,7 @@ class SymbolTable:
         self._lastIdToken = token.lexeme
         self.idValueTable.setdefault(token.lexeme,'')
         
-        if not any( tableToken.lexeme == token.lexeme for tableToken in self.idTable):
+        if not any(tableToken.lexeme == token.lexeme for tableToken in self.idTable):
             self.idTable.append(token)
 
     @classmethod
