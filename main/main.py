@@ -13,7 +13,6 @@ if __name__ == "__main__":
                  print(token.toString())
         
     except Exception as e:
-       #print( error or "análise léxica concluída")
        print("análise léxica concluída")
     
     SymbolTable.printTable()

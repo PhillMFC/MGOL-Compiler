@@ -1,6 +1,6 @@
-import traceback
 import pandas as pd
 from Token.token import Token
+from Error.error import Error
 from scanner.scanner import Scanner
 
 class Parser:
@@ -9,8 +9,14 @@ class Parser:
         self._scanner = Scanner()
         self.slrTable = pd.read_csv("Parser\slr.csv", index_col="state")
         self.grammarRules: dict = self.grammarRulesToDict()
-        self.printRulesAndSlr()
-        
+        self.countExecutions: list = 0
+        self.stack = [0]  
+        self.symbols = [] 
+        self.currentToken: Token
+        self.backupStateStack = []
+        self.backupSymbolStack = []
+        self.breakpointToken: Token
+                
     @staticmethod
     def grammarRulesToDict():
         pathToFile = 'Parser\\rules.txt'
@@ -27,50 +33,116 @@ class Parser:
         return grammarRules
 
     def parse(self):
-        stack = [0]  
-        symbols = [] 
-        currentToken = self._scanner.requestToken()
+        _recoveryToken = None
+        self.currentToken = _recoveryToken or self._scanner.requestToken()
         
-        while (currentToken):
-            if not isinstance(currentToken,bool) and currentToken.lexemeClass != 'Comentário':
-                state = stack[-1]
-                tokenClass = currentToken.lexemeClass
-                
+        while (self.currentToken):
+            
+            if not isinstance(self.currentToken,bool) and self.currentToken.lexemeClass != 'Comentário' and self.currentToken.lexemeClass != 'ERRO':
+                state = self.stack[-1]
+                tokenClass = self.currentToken.lexemeClass
                 action = self.slrTable.loc[state, tokenClass] if tokenClass in self.slrTable.columns else None
-
                 if pd.isna(action):
-                    print(f"Syntax error at token {state, currentToken.toString()}")
-                    return False
+                    _recoveryToken = self.currentToken
+                    missingToken = self.phraseLevelRecovery()
+                    
+                    if missingToken:
+                        Error.raiseErrorMessage(self.currentToken.lineIndex, self.currentToken.columnIndex, f'ERRO SINTÁTICO - PHRASE-LEVEL-RECOVERY: token \'{missingToken}\' esperado \nao invés de \'{self.currentToken.toString()}\'')
+                        action = self.slrTable.loc[state, missingToken]
+                        tokenClass = missingToken
+                    
+                    elif not missingToken:
+                        Error.raiseErrorMessage(self.currentToken.lineIndex, self.currentToken.columnIndex, f'ERRO SINTÁTICO - MODO PÂNICO: Ação desconhecida para estado \'{state}\' e token \'{self.currentToken.toString}\'')
+                        self._scanner.requestToken()
 
                 if action.startswith("s"):
                     pastState = state
                     nextState = int(action[1:])
-                    stack.append(nextState)
-                    symbols.append(tokenClass)
-                    self.printExecution(currentToken.toString(), 'Shift', pastState, tokenClass, action, stack)
-                    currentToken = self._scanner.requestToken()
+                    self.stack.append(nextState)
+                    self.symbols.append(tokenClass)
+                    #self.printExecution(tokenClass if _recoveryToken else self.currentToken.toString(), 'Shift', pastState, tokenClass, action, self.stack)
+                    self.currentToken = _recoveryToken or self._scanner.requestToken()
                     
                 elif action.startswith("R"):
+                    pastState = state
                     rule_num = int(action[1:])
                     leftSide, rightSide = self.grammarRules[rule_num]
+                    
                     for _ in rightSide:
-                        stack.pop()
-                        symbols.pop()
-                    state = stack[-1]
-                    stack.append(int(self.slrTable.loc[state, leftSide]))
-                    symbols.append(leftSide)
-                    self.printExecution(currentToken.toString(), 'Reduce', pastState, tokenClass, action, stack, leftSide, rightSide)
+                        self.stack.pop()
+                        self.symbols.pop()
+                        
+                    state = self.stack[-1]
+                    self.stack.append(int(self.slrTable.loc[state, leftSide]))
+                    self.symbols.append(leftSide)
+                    #self.printExecution(tokenClass if _recoveryToken else self.currentToken.toString(), 'Reduce', pastState, tokenClass, action, self.stack, leftSide, rightSide)
                     
                 elif action == "Acc":
-                    print("Input accepted successfully!")
+                    print("Análise Sintátia concluída. Entrada aceita!")
                     return True
-                else:
-                    print(f"Unknown action: {action}")
-                    return False
+                
+            elif not isinstance(self.currentToken,bool) and self.currentToken.lexemeClass == 'ERRO':
+                    self.currentToken = self._scanner.requestToken()
             else:
-                currentToken = self._scanner.requestToken()
+                self.currentToken = self._scanner.requestToken()
+            _recoveryToken = None
             
-            
+
+    def phraseLevelRecovery(self):
+        _state = self.stack[-1]
+        _missingToken = None
+        
+        for _tokenClass in self.slrTable.columns:
+            action = self.slrTable.loc[_state, _tokenClass]
+            if not pd.isna(action):
+                
+                if _tokenClass == 'AB_P':     
+                    _missingToken = 'AB_P'
+                    
+                elif _tokenClass == 'vir':     
+                    _missingToken = 'vir'
+                    
+                elif _tokenClass == 'FC_P':
+                    _missingToken = 'FC_P'
+                    
+                elif _tokenClass == 'lit':
+                    _missingToken = 'lit'
+                    
+                elif _tokenClass == 'real':
+                    _missingToken = 'real'
+                    
+                elif _tokenClass == 'OPR':
+                    _missingToken = 'OPR'
+                    
+                elif _tokenClass == 'PT_V':
+                    _missingToken = 'PT_V'
+                    
+                elif _tokenClass == 'PT_V':
+                    _missingToken = 'PT_V'
+                    
+                elif _tokenClass == 'fimse':
+                    _missingToken = 'fimse'
+                    
+                elif _tokenClass == 'entao':
+                    _missingToken = 'entao'
+                    
+                elif _tokenClass == 'fimfaca':
+                    _missingToken = 'fimfaca' 
+        
+        return _missingToken     
+    
+    def simulationRecovery(self, stack, tokenClass):
+
+        _state = stack[-1]
+        _targetStates = self.slrTable.loc[:,tokenClass]
+        
+        for _tokenClass in self.slrTable.columns:
+            action = self.slrTable.loc[_state, _tokenClass]
+            if not pd.isna(action):
+                if action.startswith("s"):
+                    if int(action[1:]) in _targetStates.index:
+                        return _tokenClass
+                    
     @staticmethod
     def printExecution(token, context, state, lexemeClass, action, stack, leftSide=None, rightSide=None):
         if context == 'Shift':
@@ -78,14 +150,15 @@ class Parser:
                 State: {state}\n\
                 Class: {lexemeClass}\n\
                 Action: {action}\n\
-                Stack = {stack}\n''')
+                stack = {stack}\n''')
+            
         elif context == 'Reduce':
             print(f'''{context}: {token}\n\
                 State: {state}\n\
                 Class: {lexemeClass}\n\
                 Action: {action}\n\
                 Reduction: {leftSide} → {rightSide}\n\
-                Stack = {stack}\n''')
+                stack = {stack}\n''')
     
     def printRulesAndSlr(self):
         for key, value in self.grammarRules.items():
@@ -99,4 +172,4 @@ if __name__ == '__main__':
     try:
         parser.parse()
     except Exception as e:
-        print(traceback.print_exc() or '\nÉ isso aí')
+        print('Análise interrompida. Entrada não aceita')

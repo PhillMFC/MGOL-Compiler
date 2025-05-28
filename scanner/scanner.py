@@ -22,7 +22,6 @@ class Scanner:
         file.close()
         self.file[-1] = self.file[-1] + '\n'
         self.file = self.file + ['$\n']
-        print(self.file)
 
     @classmethod
     def nextChar(self):
