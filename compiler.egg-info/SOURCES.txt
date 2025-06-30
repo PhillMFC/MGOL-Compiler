@@ -7,6 +7,8 @@ Error/__init__.py
 Error/error.py
 Parser/Parser.py
 Parser/__init__.py
+Semantic/__init__.py
+Semantic/semantic.py
 SymbolTable/__init__.py
 SymbolTable/symbolTable.py
 Token/__init__.py

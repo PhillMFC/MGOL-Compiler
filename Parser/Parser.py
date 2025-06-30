@@ -2,6 +2,7 @@ import pandas as pd
 from Token.token import Token
 from Error.error import Error
 from scanner.scanner import Scanner
+from Semantic.semantic import Semantic
 
 class Parser:
     
@@ -9,22 +10,20 @@ class Parser:
         self._scanner = Scanner()
         self.slrTable = pd.read_csv("Parser\slr.csv", index_col="state")
         self.grammarRules: dict = self.grammarRulesToDict()
-        self.countExecutions: list = 0
         self.stack = [0]  
         self.symbols = [] 
         self.currentToken: Token
-        self.backupStateStack = []
-        self.backupSymbolStack = []
-        self.breakpointToken: Token
-                
-    @staticmethod
-    def grammarRulesToDict():
+        self.semanticHandler: Semantic = Semantic()
+        self.syntaxRuleNumber = '' 
+
+    def grammarRulesToDict(self):
         pathToFile = 'Parser\\rules.txt'
         grammarRules = {}
         with open(pathToFile, "r", encoding="utf-8") as file:
             for line in file:
                 if ":" in line:
                     ruleNumber, rule = line.strip().split(":", 1)
+                    self.syntaxRuleNumber = ruleNumber
                     leftSide, rightSide = rule.strip().split("→")
                     grammarRules[int(ruleNumber)] = (
                         leftSide.strip(),
@@ -50,9 +49,16 @@ class Parser:
                         Error.raiseErrorMessage(self.currentToken.lineIndex, self.currentToken.columnIndex, f'ERRO SINTÁTICO - PHRASE-LEVEL-RECOVERY: token \'{missingToken}\' esperado \nao invés de \'{self.currentToken.toString()}\'')
                         action = self.slrTable.loc[state, missingToken]
                         tokenClass = missingToken
+                        
+                    missingToken = self.simulationRecovery(self.stack, tokenClass)
                     
+                    if missingToken:
+                        Error.raiseErrorMessage(self.currentToken.lineIndex, self.currentToken.columnIndex, f'ERRO SINTÁTICO - Simulação: token \'{missingToken}\' esperado \nao invés de \'{self.currentToken.toString()}\'')
+                        action = self.slrTable.loc[state, missingToken]
+                        tokenClass = missingToken
+                        
                     elif not missingToken:
-                        Error.raiseErrorMessage(self.currentToken.lineIndex, self.currentToken.columnIndex, f'ERRO SINTÁTICO - MODO PÂNICO: Ação desconhecida para estado \'{state}\' e token \'{self.currentToken.toString}\'')
+                        Error.raiseErrorMessage(self.currentToken.lineIndex, self.currentToken.columnIndex, f'ERRO SINTÁTICO - MODO PÂNICO: Ação desconhecida para estado \'{state}\' e token \'{self.currentToken.toString()}\'')
                         self._scanner.requestToken()
 
                 if action.startswith("s"):
@@ -142,7 +148,7 @@ class Parser:
                 if action.startswith("s"):
                     if int(action[1:]) in _targetStates.index:
                         return _tokenClass
-                    
+                
     @staticmethod
     def printExecution(token, context, state, lexemeClass, action, stack, leftSide=None, rightSide=None):
         if context == 'Shift':
@@ -172,4 +178,5 @@ if __name__ == '__main__':
     try:
         parser.parse()
     except Exception as e:
+        print(e)
         print('Análise interrompida. Entrada não aceita')
