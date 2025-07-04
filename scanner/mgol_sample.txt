@@ -21,10 +21,6 @@ B<-B+2;
 B<-B+3;
 D<-B;
 C<-5.0;
- faca-ate (B>5)
- escreva B;
- B<-B+1;
- fimfaca
 escreva "\nB=\n";
 escreva D;
 escreva "\n";

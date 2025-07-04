@@ -1,4 +1,5 @@
 import pandas as pd
+import traceback
 from Token.token import Token
 from Error.error import Error
 from scanner.scanner import Scanner
@@ -7,7 +8,7 @@ from Semantic.semantic import Semantic
 class Parser:
     
     def __init__(self):
-        self._scanner = Scanner()
+        self._scanner: Scanner = Scanner()
         self.slrTable = pd.read_csv("Parser\slr.csv", index_col="state")
         self.grammarRules: dict = self.grammarRulesToDict()
         self.stack = [0]  
@@ -23,7 +24,6 @@ class Parser:
             for line in file:
                 if ":" in line:
                     ruleNumber, rule = line.strip().split(":", 1)
-                    self.syntaxRuleNumber = ruleNumber
                     leftSide, rightSide = rule.strip().split("→")
                     grammarRules[int(ruleNumber)] = (
                         leftSide.strip(),
@@ -66,6 +66,7 @@ class Parser:
                     nextState = int(action[1:])
                     self.stack.append(nextState)
                     self.symbols.append(tokenClass)
+                    self.semanticHandler.addToStackFromToken(self.currentToken)
                     #self.printExecution(tokenClass if _recoveryToken else self.currentToken.toString(), 'Shift', pastState, tokenClass, action, self.stack)
                     self.currentToken = _recoveryToken or self._scanner.requestToken()
                     
@@ -81,9 +82,14 @@ class Parser:
                     state = self.stack[-1]
                     self.stack.append(int(self.slrTable.loc[state, leftSide]))
                     self.symbols.append(leftSide)
+                    print(rule_num, self.grammarRules[rule_num])
+                    self.semanticHandler.reduceAndStack(rule_num, leftSide, rightSide)
                     #self.printExecution(tokenClass if _recoveryToken else self.currentToken.toString(), 'Reduce', pastState, tokenClass, action, self.stack, leftSide, rightSide)
                     
                 elif action == "Acc":
+                    
+                    self.semanticHandler.createAndFillFile()
+                    self.semanticHandler.printSymbolTable()
                     print("Análise Sintátia concluída. Entrada aceita!")
                     return True
                 
@@ -178,5 +184,5 @@ if __name__ == '__main__':
     try:
         parser.parse()
     except Exception as e:
-        print(e)
+        traceback.print_exc()
         print('Análise interrompida. Entrada não aceita')

@@ -27,6 +27,12 @@ class SymbolTable:
             self.addId(token)
 
     @classmethod
+    def setIdType(self,idLexeme, newType):
+        for token in self.idTable:
+            if idLexeme == token.lexeme:
+                token.lexemeType = newType
+
+    @classmethod
     def updateTable(self):
         self._isTokenIdValue: bool = False
         _currentIdValue: str = self.idValueTable[self._lastIdToken]
